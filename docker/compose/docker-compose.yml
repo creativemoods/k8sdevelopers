@@ -1,0 +1,60 @@
+---
+version: '3.3'
+
+services:
+  # mariadb 10.6.5 container
+  # Doc: https://hub.docker.com/_/mariadb
+  myapp-mariadb:
+    container_name: myapp-mariadb
+    hostname: myapp-mariadb
+    image: 'mariadb:10.6.5'
+    volumes:
+      - 'myapp_mariadb:/var/lib/mariadb'
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=myapp
+    #env_file: .env # Autre façon de spécifier des variables d'environnement
+    ports:
+      - '3306:3306'
+
+  # PHPMyAdmin to view the contents of the DB
+  # Accessible through an SSH tunnel:
+  # ssh -L 1234:localhost:8080 azureuser@studentx.creativemoods.pt
+  # and then browse http://localhost:1234
+  myapp-phpmyadmin:
+    container_name: myapp-phpmyadmin
+    hostname: myapp-phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=myapp-mariadb
+    ports:
+      - '8080:80'
+    depends_on:
+      - myapp-mariadb
+
+  # Simple Python 2 client that serves the contents of the DB
+  myapp-client:
+    container_name: myapp-client
+    hostname: myapp-client
+    image: 'myapp-client:latest'
+    build:
+      context: ./client/
+      dockerfile: docker/Dockerfile
+    # Exercice 2 - add this to be able to dev locally
+#    volumes:
+#      - './client/:/srv/myapp:rw,cached'
+    restart: unless-stopped
+    environment:
+      - MYSQL_HOST=myapp-mariadb
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_DB=mysql
+    ports:
+      - '80:8000'
+    depends_on:
+      - myapp-mariadb
+
+volumes:
+  myapp_mariadb:  # Persist mariadb data
