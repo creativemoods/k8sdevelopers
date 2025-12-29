@@ -1,6 +1,4 @@
 ---
-version: '3.3'
-
 services:
   # mariadb 10.6.5 container
   # Doc: https://hub.docker.com/_/mariadb
@@ -14,14 +12,11 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=myapp
-    #env_file: .env # Autre façon de spécifier des variables d'environnement
+    #env_file: .env # Another way to specify env vars
     ports:
       - '3306:3306'
 
   # PHPMyAdmin to view the contents of the DB
-  # Accessible through an SSH tunnel:
-  # ssh -L 1234:localhost:8080 azureuser@studentx.creativemoods.pt
-  # and then browse http://localhost:1234
   myapp-phpmyadmin:
     container_name: myapp-phpmyadmin
     hostname: myapp-phpmyadmin
@@ -34,7 +29,7 @@ services:
     depends_on:
       - myapp-mariadb
 
-  # Simple Python 2 client that serves the contents of the DB
+  # Simple Python 3 client that serves the contents of the DB
   myapp-client:
     container_name: myapp-client
     hostname: myapp-client
@@ -42,9 +37,6 @@ services:
     build:
       context: ./client/
       dockerfile: docker/Dockerfile
-    # Exercice 2 - add this to be able to dev locally
-#    volumes:
-#      - './client/:/srv/myapp:rw,cached'
     restart: unless-stopped
     environment:
       - MYSQL_HOST=myapp-mariadb

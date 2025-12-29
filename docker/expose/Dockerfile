@@ -1,10 +1,8 @@
-FROM centos:7
-RUN yum update -y && yum install -y \
-  openssh-server \
-  passwd
-RUN mkdir /var/run/sshd
-RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key -N ''
-RUN useradd user
-RUN echo -e "pass\npass" | (passwd --stdin user)
+FROM ubuntu:22.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends openssh-server \
+  && rm -rf /var/lib/apt/lists/* && mkdir -p /var/run/sshd
+RUN useradd -m -s /bin/bash user && echo 'user:pass' | chpasswd
+RUN ssh-keygen -A
 EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D", "-e"]
