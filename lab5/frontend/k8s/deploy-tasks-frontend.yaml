@@ -27,13 +27,13 @@ spec:
     spec:
 
       imagePullSecrets:
-      - name: secret-tempreg
+      - name: sec-cmregistry
 
       priorityClassName: business-app-critical
 
       containers:
       - image: <###image###>
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         name: tasks-frontend
 
         ports:
