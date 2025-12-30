@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-myapp
+  namespace: studentx-test2
+  labels:
+    app: MyApp
+    tier: frontend
+spec:
+  containers:
+    - name: myapp-container
+      image: nginxdemos/hello:latest

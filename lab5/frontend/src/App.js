@@ -43,7 +43,7 @@ const App = () => {
 
   return (
     <div>
-      <h1>Task Manager v2</h1>
+      <h1>Task Manager</h1>
       <p>Hello {firstname}</p>
       <input
         type="text"
