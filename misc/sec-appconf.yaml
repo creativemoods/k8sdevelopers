@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: sec-appconf
+type: Opaque
+data:
+  app.conf: IyBlbXB0eSBjb25maWcgZmlsZSBqdXN0IGZvciBkZW1v
