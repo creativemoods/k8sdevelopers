@@ -13,7 +13,7 @@ spec:
   - matches:
     - path:
         type: PathPrefix
-        value: /
+        value: /api
     backendRefs:
     - name: svc-tasks-backend
       port: 5000
