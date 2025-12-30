@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-myapp
+  namespace: studentx-test2
+
+spec:
+  replicas: 3
+
+  selector:
+    matchLabels:
+      app: MyApp
+      tier: frontend
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+     maxUnavailable: 25%
+
+  template:
+    metadata:
+      labels:
+        app: MyApp
+        tier: frontend
+
+    spec:
+      containers:
+      - name: myapp-container
+        image: nginxdemos/hello:latest
+
+      initContainers:
+      - name: init-myservice
+        image: busybox:1.28
+        command: ['sh', '-c', 'for i in 1 2 3 4 5 6 7 8 9 10; do echo  `date +"%Y-%m-%d %T"` "Waiting for some dependencies" && sleep 1 ; done']

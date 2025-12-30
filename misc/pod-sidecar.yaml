@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-sidecar
+  namespace: studentx-test2
+  labels:
+    app: MyApp
+    tier: frontend
+spec:
+  containers:
+    - name: myapp-container
+      image: nginxdemos/hello:latest
+      volumeMounts:
+      - name: shared-data
+        mountPath: /usr/share/nginx/html
+
+    - name: sidecar-container
+      image: busybox:1.28
+      command: ['sh', '-c', 'while true; do echo "Hello from the sidecar container" > /pod-data/index.html && sleep 3 ; done']
+      volumeMounts:
+      - name: shared-data
+        mountPath: /pod-data
+
+  initContainers:
+  - name: init-myservice
+    image: busybox:1.28
+    command: ['sh', '-c', 'for i in 1 2 3 4 5 6 7 8 9 10; do echo  `date +"%Y-%m-%d %T"` "Waiting for some dependencies" && sleep 1 ; done']
+
+  volumes:
+  - name: shared-data
+    emptyDir: {}
