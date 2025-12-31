@@ -1,9 +1,15 @@
-import os
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
+import time
+import math
+import random
+import os
 
 app = Flask(__name__)
 CORS(app)
+
+# App start time
+start_time = time.time()
 
 tasks = []
 
@@ -31,6 +37,18 @@ def delete_task():
 #    print(task);
     tasks[:] = [t for t in tasks if t['task'] != task]
     return jsonify({"message": "Task deleted successfully!"})
+
+# Health probes
+@app.route('/api/health', methods=['GET'])
+def health():
+    return '', 200
+
+@app.route('/api/ready', methods=['GET'])
+def readiness_probe():
+    elapsed = time.time() - start_time
+    if elapsed < 20:
+        return jsonify({"status": "not ready ("+str(elapsed)+")"}), 404
+    return jsonify({"status": "ready"}), 200
 
 @app.route('/api/metrics', methods=['GET'])
 def prometheus_metrics():

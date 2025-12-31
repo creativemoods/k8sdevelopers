@@ -11,4 +11,3 @@ spec:
   selector:
     app: tasks
     tier: backend
-  clusterIP: None
