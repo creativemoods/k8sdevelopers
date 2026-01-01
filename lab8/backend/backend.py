@@ -1,3 +1,7 @@
+# Prevent ANSI coloring in logs
+import werkzeug
+werkzeug.serving._log_add_style = False
+
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 import time
