@@ -37,6 +37,12 @@ start_time = time.time()
 
 tasks = []
 
+@app.route('/api/config', methods=['GET'])
+def get_config():
+    return jsonify({
+        "firstname": os.getenv("FIRSTNAME", "World")
+    })
+
 @app.route('/api/tasks', methods=['GET'])
 def get_tasks():
     return jsonify(tasks)
