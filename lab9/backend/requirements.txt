@@ -5,3 +5,4 @@ opentelemetry-sdk
 opentelemetry-instrumentation
 opentelemetry-instrumentation-flask
 opentelemetry-exporter-otlp
+python-json-logger
