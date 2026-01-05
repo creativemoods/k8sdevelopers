@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: deploy-tasks-frontend
+  namespace: {{ .Release.Namespace }}
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: tasks
+      tier: frontend
+
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+     maxUnavailable: 25%
+
+  template:
+    metadata:
+      labels:
+        app: tasks
+        tier: frontend
+
+    spec:
+
+      imagePullSecrets:
+      - name: sec-cmregistry
+
+      priorityClassName: business-app-critical
+
+      containers:
+      - image: {{ required ".Values.image entry is required!" .Values.image }}
+        imagePullPolicy: IfNotPresent
+        name: tasks-frontend
+
+        ports:
+        - containerPort: 3000
+
+        startupProbe:
+          tcpSocket:
+            port: 3000
+          failureThreshold: 12
+          periodSeconds: 10
+
+        livenessProbe:
+          tcpSocket:
+            port: 3000
+          periodSeconds: 60
+          failureThreshold: 1
+          initialDelaySeconds: 0
+
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          periodSeconds: 10
+          failureThreshold: 3
+          initialDelaySeconds: 0
+          timeoutSeconds: 5
+
+        resources:
+          requests:
+            memory: "16M"
+            cpu: "50m"
+            ephemeral-storage: "512M"
+          limits:
+            memory: "128M"
+            cpu: "500m"
+            ephemeral-storage: "512M"
+
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app: tasks
+              tier: frontend

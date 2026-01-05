@@ -1,0 +1,4 @@
+firstname: Studentx
+image: registry.creativemoods.pt/studentx/backend:playbook6
+host: studentx-tasks.creativemoods.pt
+otelEndpoint: otel-collector-opentelemetry-collector.tracing.svc.cluster.local:4317
