@@ -115,7 +115,7 @@ def delete_task():
     return jsonify({"message": "Task deleted successfully!"})
 
 # Health probes
-@app.route('/api/health', methods=['GET'])
+@app.route('/api/healthz', methods=['GET'])
 def health():
     return '', 200
 
