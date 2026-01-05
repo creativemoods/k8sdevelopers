@@ -1,0 +1,20 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: sm-backend
+  namespace: {{ .Release.Namespace }}
+  labels:
+    release: prometheus
+spec:
+  selector:
+    matchLabels:
+      app: tasks
+      tier: backend
+  endpoints:
+    - port: http
+      path: /api/metrics
+      interval: 15s
+      scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+      - {{ .Release.Namespace }}
