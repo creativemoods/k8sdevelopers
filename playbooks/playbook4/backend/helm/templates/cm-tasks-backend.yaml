@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-tasks-backend
+  namespace: {{ .Release.Namespace }}
+data:
+  FIRSTNAME: "{{ required ".Values.firstname entry is required!" .Values.firstname }}"
+  OTEL_ENDPOINT: "{{ required ".Values.otelEndpoint entry is required!" .Values.otelEndpoint }}"
