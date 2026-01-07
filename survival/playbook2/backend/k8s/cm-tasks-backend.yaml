@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: cm-tasks-backend
-  namespace: <###namespace###>
-data:
-  FIRSTNAME: "<###firstname###>"
