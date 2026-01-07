@@ -40,7 +40,7 @@ spec:
           - configMapRef:
               name: cm-tasks-backend
         command: ["python"]
-        args: ["app.py"]
+        args: ["backend.py"]
 
         ports:
         - containerPort: 5000

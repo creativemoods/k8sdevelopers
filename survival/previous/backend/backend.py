@@ -10,6 +10,7 @@ import random
 import os
 from pythonjsonlogger import jsonlogger
 import logging
+import traceback
 
 # Config for instrumentation
 from opentelemetry import trace
@@ -82,6 +83,11 @@ def get_tasks():
 def add_task():
     task = request.json.get('task')
     if task:
+        try:
+            raise RuntimeError("Lab crash: demonstrating kubectl logs --previous")
+        except Exception:
+            traceback.print_exc()     # prints a real Python stack trace to stderr
+            os._exit(1)               # hard-exit so the container definitely restarts
         with tracer.start_as_current_span("validate-task") as span:
             time.sleep(random.uniform(0.05, 0.2))  # Simulated validation delay
             if len(task) < 3:
@@ -115,7 +121,7 @@ def delete_task():
     return jsonify({"message": "Task deleted successfully!"})
 
 # Health probes
-@app.route('/api/healthz', methods=['GET'])
+@app.route('/api/health', methods=['GET'])
 def health():
     return '', 200
 
