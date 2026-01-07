@@ -1,0 +1,2 @@
+image: registry.creativemoods.pt/studentx/frontend:services
+host: studentx-tasks.creativemoods.pt
