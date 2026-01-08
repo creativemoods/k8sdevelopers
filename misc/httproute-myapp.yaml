@@ -15,5 +15,5 @@ spec:
         type: PathPrefix
         value: /test2
     backendRefs:
-    - name: service-myapp
+    - name: svc-myapp
       port: 80
